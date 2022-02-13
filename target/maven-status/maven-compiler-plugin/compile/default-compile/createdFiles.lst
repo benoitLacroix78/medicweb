@@ -1,0 +1,6 @@
+com/gersen/bean/Person.class
+com/gersen/Main.class
+com/gersen/bean/Profil.class
+com/gersen/bean/Adress.class
+com/gersen/repository/PersonRepository.class
+com/gersen/controller/PersonController.class
