@@ -19,7 +19,7 @@ public class PersonController {
     @Autowired
     PersonRepository personRepository;
 
-    @GetMapping("/personnes")
+    @GetMapping("/person")
     public ResponseEntity<List<Person>> getAllPersons(@RequestParam(required = false) String nom) {
         try {
             List<Person> personList = new ArrayList<Person>();
@@ -39,7 +39,7 @@ public class PersonController {
         }
     }
 
-    @GetMapping("/personnes/{id}")
+    @GetMapping("/person/{id}")
     public ResponseEntity<Person> getPersonById(@PathVariable("id") long id) {
 
         Optional<Person> personData = personRepository.findById(id);
@@ -51,18 +51,18 @@ public class PersonController {
         }
     }
 
-    @PostMapping("/personnes")
+    @PostMapping("/person")
     public ResponseEntity<Person> createPerson(@RequestBody Person person) {
         try {
             Person addperson = personRepository
-                    .save(new Person(person.getId(), person.getNom(), person.getPrenom()));
+                    .save(new Person(person.getId(), person.getNom(), person.getPrenom(), person.getTitle()));
             return new ResponseEntity<>(addperson, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @PutMapping("/personnes/{id}")
+    @PutMapping("/person/{id}")
     public ResponseEntity<Person> updatePerson(@PathVariable("id") long id, @RequestBody Person person) {
         Optional<Person> personData = personRepository.findById(id);
 
@@ -70,13 +70,15 @@ public class PersonController {
             Person _person = personData.get();
             _person.setNom(person.getNom());
             _person.setPrenom(person.getPrenom());
-            return new ResponseEntity<>(personRepository.save(_person), HttpStatus.OK);
+            _person.setTitle(person.getTitle());
+            ResponseEntity test = new ResponseEntity<>(personRepository.save(_person), HttpStatus.OK);
+            return test;
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @DeleteMapping("/personnes/{id}")
+    @DeleteMapping("/person/{id}")
     public ResponseEntity<Person> deletePerson(@PathVariable("id") long id) {
         try {
             personRepository.deleteById(id);
@@ -86,7 +88,7 @@ public class PersonController {
         }
     }
 
-    @DeleteMapping("/personnes")
+    @DeleteMapping("/person")
     public ResponseEntity<Person> deleteAllPerson() {
         try {
             personRepository.deleteAll();

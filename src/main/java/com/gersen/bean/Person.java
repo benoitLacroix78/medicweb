@@ -19,6 +19,13 @@ public class Person {
     @Column(name = "prenom")
     private String prenom;
 
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
 
     public long getId() {
         return id;
@@ -48,10 +55,11 @@ public class Person {
     public Person() {
     }
 
-    public Person(long id, String nom, String prenom) {
+    public Person(long id, String nom, String prenom, String title) {
         this.id = id;
         this.nom = nom;
         this.prenom = prenom;
+        this.title = title;
     }
 
     @Override
@@ -60,6 +68,7 @@ public class Person {
                 "id=" + id +
                 ", nom='" + nom + '\'' +
                 ", prenom='" + prenom + '\'' +
+                ", title='" + title + '\'' +
                 '}';
     }
 }
