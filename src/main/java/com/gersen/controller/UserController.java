@@ -1,7 +1,7 @@
 package com.gersen.controller;
 
-import com.gersen.bean.Person;
-import com.gersen.repository.PersonRepository;
+import com.gersen.bean.User;
+import com.gersen.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,35 +14,35 @@ import java.util.Optional;
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
 @RequestMapping("/api")
-public class PersonController {
+public class UserController {
 
     @Autowired
-    PersonRepository personRepository;
+    UserRepository personRepository;
 
-    @GetMapping("/person")
-    public ResponseEntity<List<Person>> getAllPersons(@RequestParam(required = false) String nom) {
+    @GetMapping("/user")
+    public ResponseEntity<List<User>> getAllUsers(@RequestParam(required = false) String nom) {
         try {
-            List<Person> personList = new ArrayList<Person>();
+            List<User> userList = new ArrayList<User>();
 
             if (nom == null)
-                personRepository.findAll().forEach(personList::add);
+                personRepository.findAll().forEach(userList::add);
             else
-                personRepository.findByTitleContaining(nom).forEach(personList::add);
+                personRepository.findByTitleContaining(nom).forEach(userList::add);
 
-            if (personList.isEmpty()) {
+            if (userList.isEmpty()) {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
-            return new ResponseEntity<>(personList, HttpStatus.OK);
+            return new ResponseEntity<>(userList, HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
-    @GetMapping("/person/{id}")
-    public ResponseEntity<Person> getPersonById(@PathVariable("id") long id) {
+    @GetMapping("/user/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable("id") long id) {
 
-        Optional<Person> personData = personRepository.findById(id);
+        Optional<User> personData = personRepository.findById(id);
 
         if (personData.isPresent()) {
             return new ResponseEntity<>(personData.get(), HttpStatus.OK);
@@ -51,35 +51,35 @@ public class PersonController {
         }
     }
 
-    @PostMapping("/person")
-    public ResponseEntity<Person> createPerson(@RequestBody Person person) {
+/*    @PostMapping("/user")
+    public ResponseEntity<User> createPerson(@RequestBody User user) {
         try {
-            Person addperson = personRepository
-                    .save(new Person(person.getId(), person.getNom(), person.getPrenom(), person.getTitle()));
+            User addperson = personRepository
+                    .save(new User(user.getId(), user.getUsername(), user.getFirstname(), user.getTitle(),user.getEmail(),user.getPassword()));
             return new ResponseEntity<>(addperson, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
+    }*/
 
-    @PutMapping("/person/{id}")
-    public ResponseEntity<Person> updatePerson(@PathVariable("id") long id, @RequestBody Person person) {
-        Optional<Person> personData = personRepository.findById(id);
+    @PutMapping("/user/{id}")
+    public ResponseEntity<User> updateUser(@PathVariable("id") long id, @RequestBody User user) {
+        Optional<User> personData = personRepository.findById(id);
 
         if (personData.isPresent()) {
-            Person _person = personData.get();
-            _person.setNom(person.getNom());
-            _person.setPrenom(person.getPrenom());
-            _person.setTitle(person.getTitle());
-            ResponseEntity test = new ResponseEntity<>(personRepository.save(_person), HttpStatus.OK);
+            User _user = personData.get();
+            _user.setUsername(user.getUsername());
+            _user.setFirstname(user.getFirstname());
+            _user.setTitle(user.getTitle());
+            ResponseEntity test = new ResponseEntity<>(personRepository.save(_user), HttpStatus.OK);
             return test;
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 
-    @DeleteMapping("/person/{id}")
-    public ResponseEntity<Person> deletePerson(@PathVariable("id") long id) {
+    @DeleteMapping("/user/{id}")
+    public ResponseEntity<User> deleteUser(@PathVariable("id") long id) {
         try {
             personRepository.deleteById(id);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -88,8 +88,8 @@ public class PersonController {
         }
     }
 
-    @DeleteMapping("/person")
-    public ResponseEntity<Person> deleteAllPerson() {
+    @DeleteMapping("/user")
+    public ResponseEntity<User> deleteAllUsers() {
         try {
             personRepository.deleteAll();
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
